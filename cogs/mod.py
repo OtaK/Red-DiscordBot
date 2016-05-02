@@ -6,6 +6,7 @@ from __main__ import send_cmd_help, settings
 import os
 import logging
 import json
+import asyncio
 
 class Mod:
     """Moderation tools."""
@@ -16,6 +17,7 @@ class Mod:
         self.blacklist_list = fileIO("data/mod/blacklist.json", "load")
         self.ignore_list = fileIO("data/mod/ignorelist.json", "load")
         self.filter = fileIO("data/mod/filter.json", "load")
+        self.past_names = fileIO("data/mod/past_names.json", "load")
 
     @commands.group(pass_context=True,no_pm=True)
     @checks.serverowner_or_permissions(manage_server=True)
@@ -80,6 +82,22 @@ class Mod:
         except Exception as e:
             print(e)
 
+    @commands.command(no_pm=True, pass_context=True)
+    @checks.admin_or_permissions(manage_nicknames=True)
+    async def rename(self, ctx, user : discord.Member, *, nickname=""):
+        """Changes user's nickname
+
+        Leaving the nickname empty will remove it."""
+        nickname = nickname.strip()
+        if nickname == "":
+            nickname = None
+        try:
+            await self.bot.change_nickname(user, nickname)
+            await self.bot.say("Done.")
+        except discord.Forbidden:
+            await self.bot.say("I cannot do that, I lack the "
+                "\"Manage Nicknames\" permission.")
+
     @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_messages=True)
     async def cleanup(self, ctx):
@@ -110,14 +128,17 @@ class Mod:
                     async for x in self.bot.logs_from(message.channel, limit=100, before=message):
                         if number == 0: 
                             await self.bot.delete_message(cmdmsg)
+                            await asyncio.sleep(0.25)
                             return
                         if text in x.content:
                             await self.bot.delete_message(x)
+                            await asyncio.sleep(0.25)
                             number -= 1
                         new = True
                         message = x
                     if not new or number == 0: 
                         await self.bot.delete_message(cmdmsg)
+                        await asyncio.sleep(0.25)
                         break
         except discord.errors.Forbidden:
             await self.bot.say("I need permissions to manage messages in this channel.")
@@ -140,14 +161,17 @@ class Mod:
                     async for x in self.bot.logs_from(message.channel, limit=100, before=message):
                         if number == 0: 
                             await self.bot.delete_message(cmdmsg)
+                            await asyncio.sleep(0.25)
                             return
                         if x.author.id == user.id:
                             await self.bot.delete_message(x)
+                            await asyncio.sleep(0.25)
                             number -= 1
                         new = True
                         message = x
                     if not new or number == 0: 
                         await self.bot.delete_message(cmdmsg)
+                        await asyncio.sleep(0.25)
                         break
         except discord.errors.Forbidden:
             await self.bot.say("I need permissions to manage messages in this channel.")
@@ -165,6 +189,7 @@ class Mod:
             if number > 0 and number < 10000:
                 async for x in self.bot.logs_from(channel, limit=number+1):
                     await self.bot.delete_message(x)
+                    await asyncio.sleep(0.25)
         except discord.errors.Forbidden:
             await self.bot.say("I need permissions to manage messages in this channel.")
 
@@ -437,6 +462,20 @@ class Mod:
             print(e)
             await self.bot.say("Something went wrong.")
 
+    @commands.command()
+    async def names(self, user : discord.Member):
+        """Show previous names of a user"""
+        exclude = ("@everyone", "@here")
+        if user.id in self.past_names.keys():
+            names = ""
+            for name in self.past_names[user.id]:
+                if not any(mnt in name.lower() for mnt in exclude):
+                    names += " {}".format(name)
+            names = "```{}```".format(names)
+            await self.bot.say("Past names:\n{}".format(names))
+        else:
+            await self.bot.say("That user doesn't have any recorded name change.")
+
     def immune_from_filter(self, message):
         user = message.author
         server = message.server
@@ -470,6 +509,15 @@ class Mod:
                         pass
                     print("Message deleted. Filtered: " + w )
 
+    async def check_names(self, before, after):
+        if before.name != after.name:
+            if before.id not in self.past_names.keys():
+                self.past_names[before.id] = [before.name]
+            else:
+                if before.name not in self.past_names[before.id]:
+                    self.past_names[before.id].append(before.name)
+            fileIO("data/mod/past_names.json", "save", self.past_names)
+
 def check_folders():
     folders = ("data", "data/mod/")
     for folder in folders:
@@ -496,6 +544,10 @@ def check_files():
         print("Creating empty filter.json...")
         fileIO("data/mod/filter.json", "save", {})
 
+    if not os.path.isfile("data/mod/past_names.json"):
+        print("Creating empty past_names.json...")
+        fileIO("data/mod/past_names.json", "save", {})
+
 def setup(bot):
     global logger
     check_folders()
@@ -508,4 +560,5 @@ def setup(bot):
         logger.addHandler(handler)
     n = Mod(bot)
     bot.add_listener(n.check_filter, "on_message")
+    bot.add_listener(n.check_names, "on_member_update")
     bot.add_cog(n)
