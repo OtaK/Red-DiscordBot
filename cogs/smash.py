@@ -38,7 +38,7 @@ class Smash:
         data = await self._rankplayer(player)
         if data is "error":
             await self.bot.say("Player not found!")
-         else:
+        else:
             ranktext = data.info.tag
             if data.info.realname.length > 0:
                 ranktext += " AKA " + data.info.realname
