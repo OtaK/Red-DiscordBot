@@ -53,7 +53,7 @@ class Smash:
             else:
                 ranktext += "\nUnknown main(s)"
 
-            ranktext += "\n" + str(data["skill"]["record"]["tournaments"]) + " [" + str(data["skill"]["record"]["wins"]) + "W / " + str(data["skill"]["record"]["losses"]) + "L - " + str(data["skill"]["win_percentage"]) + "% win] \n"
+            ranktext += "\nAttended " + str(data["skill"]["record"]["tournaments"]) + " tournaments [" + str(data["skill"]["record"]["wins"]) + "W / " + str(data["skill"]["record"]["losses"]) + "L - " + str(data["skill"]["win_percentage"]) + "% win] \n"
             rank_parts = []
             if data["skill"]["eu_rank"]:
                 rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " EU")
