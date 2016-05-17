@@ -34,8 +34,10 @@ class Smash:
         return "error"
 
     @commands.command(pass_context=True, no_pm=False)
-    async def rank(self, ctx, player):
+    async def rank(self, ctx, *input):
         """Check your ranking details"""
+        player = " ".join(input)
+
         data = await self._rankplayer(player)
         if data is "error":
             await self.bot.say("Player not found!")
@@ -64,8 +66,10 @@ class Smash:
             await self.bot.say(ranktext)
 
     @commands.command(pass_context=True, no_pm=False)
-    async def pvp(self, ctx, player1, player2):
+    async def pvp(self, ctx, *input):
         """Check the pvp record between two players"""
+        player1, player2 = " ".join(input).split(';')
+
         data = await self._rankpvp(player1, player2)
         if data is "error":
             await self.bot.say("Player(s) not found!")
