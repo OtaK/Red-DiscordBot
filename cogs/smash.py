@@ -46,7 +46,7 @@ class Smash:
             if len(data["info"]["country"]) > 0:
                 ranktext += " [" + data["info"]["country"] + "]"
 
-            if len(data["info"]["mains"]) > 0:
+            if len(data["info"]["mains"]) > 0 and len(data["info"]["mains"][0]) > 0:
                 ranktext += "\nPlays" + ', '.join(data["info"]["mains"])
             else:
                 ranktext += "\nUnknown main(s)"
