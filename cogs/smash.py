@@ -41,12 +41,12 @@ class Smash:
             await self.bot.say("Player not found!")
         else:
             ranktext = data["info"]["tag"]
-            if data["info"]["realname"].length > 0:
+            if len(data["info"]["realname"]) > 0:
                 ranktext += " AKA " + data["info"]["realname"]
-            if data["info"]["country"].length > 0:
+            if len(data["info"]["country"]) > 0:
                 ranktext += " [" + data["info"]["country"] + "]"
 
-            if data["info"]["mains"].length > 0:
+            if len(data["info"]["mains"]) > 0:
                 ranktext += "\nPlays" + ', '.join(data["info"]["mains"])
             else:
                 ranktext += "\nUnknown main(s)"
@@ -71,7 +71,7 @@ class Smash:
             await self.bot.say("Player(s) not found!")
 
         pvptext = ""
-        if data["matches"].length > 0:
+        if len(data["matches"]) > 0:
             pvptext += player1 + " " + data[player1]["wins"] + " - " + data[player2]["wins"] + " " + player2
             matches_parths = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
             pvptext += '\n'.join(matches_parts)
