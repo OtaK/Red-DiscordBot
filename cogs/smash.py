@@ -51,14 +51,14 @@ class Smash:
             else:
                 ranktext += "\nUnknown main(s)"
 
-            ranktext += "\n" + data["skill"]["record"]["tournaments"] + " [" + data["skill"]["record"]["wins"] + "W / " + data["skill"]["record"]["losses"] + "L - " + data["skill"]["win_percentage"] + "% win] \n"
+            ranktext += "\n" + str(data["skill"]["record"]["tournaments"]) + " [" + str(data["skill"]["record"]["wins"]) + "W / " + str(data["skill"]["record"]["losses"]) + "L - " + str(data["skill"]["win_percentage"]) + "% win] \n"
             rank_parts = []
             if data["skill"]["eu_rank"]:
-                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " EU")
+                rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " EU")
             if data["skill"]["country_rank"]:
-                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " " + data["info"]["country"])
+                rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " " + data["info"]["country"])
             if data["skill"]["character_rank"]:
-                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " for " + data["info"]["mains"][0])
+                rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " for " + data["info"]["mains"][0])
 
             ranktext += '\n'.join(rank_parts)
             await self.bot.say(ranktext)
@@ -72,7 +72,7 @@ class Smash:
 
         pvptext = ""
         if len(data["matches"]) > 0:
-            pvptext += player1 + " " + data[player1]["wins"] + " - " + data[player2]["wins"] + " " + player2
+            pvptext += player1 + " " + str(data[player1]["wins"]) + " - " + str(data[player2]["wins"]) + " " + player2
             matches_parths = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
             pvptext += '\n'.join(matches_parts)
         else:
