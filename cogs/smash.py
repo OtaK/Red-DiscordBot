@@ -47,7 +47,7 @@ class Smash:
 
             if data.info.mains.length > 0:
                 ranktext += "\nPlays" + ', '.join(data.info.mains)
-            else
+            else:
                 ranktext += "\nUnknown main(s)"
 
             ranktext += "\n" + data.skill.record.tournaments + " [" + data.skill.record.wins + "W / " + data.skill.record.losses + "L - " + data.skill.win_percentage + "% win] \n"
