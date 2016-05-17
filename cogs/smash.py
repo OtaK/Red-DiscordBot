@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from cogs.utils import checks
 from __main__ import set_cog, send_cmd_help, settings
-from urllib import quote_plus
+import urllib
 import aiohttp
 import asyncio
 
@@ -15,7 +15,7 @@ class Smash:
         self.bot = bot
 
     async def _rankplayer(player):
-        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + quote_plus(player);
+        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.quote_plus(player);
         try:
             async with aiohttp.get(url) as r:
                 return await r.json()
@@ -24,7 +24,7 @@ class Smash:
         return "error"
 
     async def _rankpvp(p1, p2):
-        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + quote_plus(p1) + "/vs/" + quote_plus(p2);
+        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.quote_plus(p1) + "/vs/" + urllib.quote_plus(p2);
         try:
             async with aiohttp.get(url) as r:
                 return await r.json()
