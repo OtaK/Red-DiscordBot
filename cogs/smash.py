@@ -74,7 +74,7 @@ class Smash:
         if len(data["matches"]) > 0:
             pvptext += player1 + " " + str(data[player1]["wins"]) + " - " + str(data[player2]["wins"]) + " " + player2
             matches_parts = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
-            pvptext += '\n'.join(matches_parts)
+            pvptext += "\n" + '\n'.join(matches_parts)
         else:
             pvptext += "Those players never played against each other yet!"
 
