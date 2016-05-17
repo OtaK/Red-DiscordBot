@@ -40,25 +40,25 @@ class Smash:
         if data is "error":
             await self.bot.say("Player not found!")
         else:
-            ranktext = data.info.tag
-            if data.info.realname.length > 0:
-                ranktext += " AKA " + data.info.realname
-            if data.info.country.length > 0:
-                ranktext += " [" + data.info.country + "]"
+            ranktext = data["info"]["tag"]
+            if data["info"]["realname"].length > 0:
+                ranktext += " AKA " + data["info"]["realname"]
+            if data["info"]["country"].length > 0:
+                ranktext += " [" + data["info"]["country"] + "]"
 
-            if data.info.mains.length > 0:
-                ranktext += "\nPlays" + ', '.join(data.info.mains)
+            if data["info"]["mains"].length > 0:
+                ranktext += "\nPlays" + ', '.join(data["info"]["mains"])
             else:
                 ranktext += "\nUnknown main(s)"
 
-            ranktext += "\n" + data.skill.record.tournaments + " [" + data.skill.record.wins + "W / " + data.skill.record.losses + "L - " + data.skill.win_percentage + "% win] \n"
+            ranktext += "\n" + data["skill"]["record"]["tournaments"] + " [" + data["skill"]["record"]["wins"] + "W / " + data["skill"]["record"]["losses"] + "L - " + data["skill"]["win_percentage"] + "% win] \n"
             rank_parts = []
-            if data.skill.eu_rank:
-                rank_parts.append("Ranked " + data.skill.eu_rank + " EU")
-            if data.skill.country_rank:
-                rank_parts.append("Ranked " + data.skill.eu_rank + " " + data.info.country)
-            if data.skill.character_rank:
-                rank_parts.append("Ranked " + data.skill.eu_rank + " for " + data.info.mains[0])
+            if data["skill"]["eu_rank"]:
+                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " EU")
+            if data["skill"]["country_rank"]:
+                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " " + data["info"]["country"])
+            if data["skill"]["character_rank"]:
+                rank_parts.append("Ranked " + data["skill"]["eu_rank"] + " for " + data["info"]["mains"][0])
 
             ranktext += '\n'.join(rank_parts)
             await self.bot.say(ranktext)
@@ -71,9 +71,9 @@ class Smash:
             await self.bot.say("Player(s) not found!")
 
         pvptext = ""
-        if data.matches.length > 0:
-            pvptext += player1 + " " + data[player1].wins + " - " + data[player2].wins + " " + player2
-            matches_parths = [m.winner + " won at " + m.round + " of " + m.tournament for m in data.matches.map]
+        if data["matches"].length > 0:
+            pvptext += player1 + " " + data[player1]["wins"] + " - " + data[player2]["wins"] + " " + player2
+            matches_parths = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
             pvptext += '\n'.join(matches_parts)
         else:
             pvptext += "Those players never played against each other yet!"
