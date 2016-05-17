@@ -16,7 +16,7 @@ class Smash:
         self.bot = bot
 
     async def _rankplayer(self, player):
-        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.quote_plus(player);
+        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.parse.quote(player);
         try:
             async with aiohttp.get(url) as r:
                 return await r.json()
@@ -25,7 +25,7 @@ class Smash:
         return "error"
 
     async def _rankpvp(self, p1, p2):
-        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.quote_plus(p1) + "/vs/" + urllib.quote_plus(p2);
+        url = "http://smashstats.otak-arts.com/1.0/melee/player/" + urllib.parse.quote(p1) + "/vs/" + urllib.parse.quote(p2);
         try:
             async with aiohttp.get(url) as r:
                 return await r.json()
