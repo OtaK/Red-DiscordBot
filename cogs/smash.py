@@ -49,7 +49,7 @@ class Smash:
                 ranktext += " [" + data["info"]["country"] + "]"
 
             if len(data["info"]["mains"]) > 0 and data["info"]["mains"][0] is not None:
-                ranktext += "\nPlays" + ', '.join(data["info"]["mains"])
+                ranktext += "\nPlays " + ', '.join(data["info"]["mains"])
             else:
                 ranktext += "\nUnknown main(s)"
 
@@ -80,7 +80,7 @@ class Smash:
             matches_parts = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
             pvptext += "\n" + '\n'.join(matches_parts)
         else:
-            pvptext += "Those players never played against each other yet!"
+            pvptext += "These players never played against each other yet!"
 
         await self.bot.say(pvptext)
 
