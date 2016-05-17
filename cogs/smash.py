@@ -56,9 +56,9 @@ class Smash:
             if data["skill"]["eu_rank"]:
                 rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " EU")
             if data["skill"]["country_rank"]:
-                rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " " + data["info"]["country"])
+                rank_parts.append("Ranked " + str(data["skill"]["country_rank"]) + " " + data["info"]["country"])
             if data["skill"]["character_rank"]:
-                rank_parts.append("Ranked " + str(data["skill"]["eu_rank"]) + " for " + data["info"]["mains"][0])
+                rank_parts.append("Ranked " + str(data["skill"]["character_rank"]) + " for " + data["info"]["mains"][0])
 
             ranktext += '\n'.join(rank_parts)
             await self.bot.say(ranktext)
