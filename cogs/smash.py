@@ -5,6 +5,7 @@ from __main__ import set_cog, send_cmd_help, settings
 import urllib
 import aiohttp
 import asyncio
+import logging
 
 class Smash:
     """Smash
