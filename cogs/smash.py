@@ -67,17 +67,26 @@ class Smash:
 
     @commands.command(pass_context=True, no_pm=False)
     async def pvp(self, ctx, *input):
-        """Check the pvp record between two players"""
-        player1, player2 = " ".join(input).split(';')
+        """Check the pvp record between two players
+
+        Usage example:
+        pvp cyr;la france"""
+        splitted_input = " ".join(input).split(';')
+        if len(splitted_input) is not 2:
+            return await send_cmd_help(ctx)
+
+        player1, player2 = splitted_input
 
         data = await self._rankpvp(player1, player2)
         if data is "error":
             await self.bot.say("Player(s) not found!")
 
         pvptext = ""
-        if len(data["matches"]) > 0:
+        if "matches" not in data:
+            pvptext += "These players never played against each other yet!"
+        elif len(data["matches"]) > 0:
             pvptext += player1 + " " + str(data[player1]["wins"]) + " - " + str(data[player2]["wins"]) + " " + player2
-            matches_parts = [m["winner"] + " won at " + m["round"] + " of " + m["tournament"] for m in data["matches"]]
+            matches_parts = [m["winner"] + " won at " + str(m["round"]) + " of " + str(m["tournament"]) for m in data["matches"]]
             pvptext += "\n" + '\n'.join(matches_parts)
         else:
             pvptext += "These players never played against each other yet!"
